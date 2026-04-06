@@ -1,0 +1,438 @@
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --red: #e8193c;
+  --soft-red: #ff4d6d;
+  --gold: #f9c74f;
+  --cream: #fff8f0;
+  --dark: #000000;
+  --card-bg: #ffffff;
+  --card-text: #1a0a0a;
+  --card-sub-text: #5a3a3a;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--dark);
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--cream);
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ── PAGES ── */
+.page {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.8s ease;
+  z-index: 1;
+  overflow: hidden;
+}
+.page.active { opacity: 1; pointer-events: all; }
+
+/* ── RAIN CANVAS ── */
+#rain-canvas {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── FLOATING CARD ── */
+.floating-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(232, 25, 60, 0.2);
+  border-radius: 24px;
+  padding: clamp(24px, 6vw, 40px) clamp(20px, 6vw, 36px);
+  max-width: 360px;
+  width: 88%;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(232,25,60,0.22), 0 20px 60px rgba(0,0,0,0.5);
+  animation: floatCard 4s ease-in-out infinite;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0px) rotate(-0.5deg); }
+  50%       { transform: translateY(-14px) rotate(0.5deg); }
+}
+
+.card-eyebrow {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(0.85rem, 3vw, 1rem);
+  color: rgba(232,25,60,0.8);
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+
+.card-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  font-weight: 700;
+  color: var(--card-text);
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.card-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(0.95rem, 3.5vw, 1.2rem);
+  color: var(--card-sub-text);
+  line-height: 1.6;
+}
+
+.card-deco {
+  position: absolute;
+  top: -1px; left: 50%; transform: translateX(-50%);
+  width: 60px; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
+  border-radius: 2px;
+}
+
+/* ── OPEN ME BUTTON ── */
+.open-btn {
+  margin-top: 24px;
+  padding: clamp(12px, 3vw, 16px) clamp(32px, 8vw, 44px);
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--red), #c0122e);
+  color: white;
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(1.1rem, 4vw, 1.35rem);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(232,25,60,0.45), 0 2px 8px rgba(0,0,0,0.4);
+  animation: floatBtn 3s ease-in-out infinite;
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative; z-index: 2;
+  letter-spacing: 0.02em;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 120px;
+}
+
+.open-btn:active {
+  transform: scale(0.96) !important;
+  box-shadow: 0 4px 16px rgba(232,25,60,0.35);
+}
+
+@keyframes floatBtn {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* ── PAGE 2: ENVELOPE ── */
+.envelope-scene {
+  position: relative;
+  width: clamp(220px, 72vw, 280px);
+  height: clamp(220px, 72vw, 280px);
+  z-index: 2;
+  animation: floatCard 4s ease-in-out infinite;
+  margin-bottom: 16px;
+}
+
+.envelope-scene.hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.envelope-wrap { position: relative; width: 100%; height: 100%; }
+
+/* Envelope body */
+.env-body {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 71%;
+  background: linear-gradient(160deg, #ffffff 0%, #f5f0f0 100%);
+  border-radius: 6px 6px 10px 10px;
+  border: 1.5px solid rgba(232,25,60,0.35);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(232,25,60,0.1);
+  overflow: hidden;
+}
+
+/* Bottom flap */
+.env-bottom-flap {
+  position: absolute;
+  bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 50% solid transparent;
+  border-right: 50% solid transparent;
+  border-bottom: 36% solid rgba(232,25,60,0.12);
+}
+
+/* Side shadow */
+.env-left {
+  position: absolute; bottom: 0; left: 0;
+  width: 50%; height: 100%;
+  background: rgba(0,0,0,0.12);
+}
+
+/* Top flap */
+.env-flap {
+  position: absolute;
+  top: 14%; left: 0; right: 0;
+  height: 57%;
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 3;
+  perspective: 600px;
+}
+
+.env-flap-inner {
+  width: 100%; height: 0;
+  border-left: 50% solid transparent;
+  border-right: 50% solid transparent;
+  border-top: 57% solid #f5f0f0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+  position: relative;
+}
+
+.env-flap-inner::after {
+  content: '';
+  position: absolute;
+  top: -55%; left: -49%;
+  width: 98%; height: 0;
+  border-left: 49% solid transparent;
+  border-right: 49% solid transparent;
+  border-top: 55% solid rgba(232,25,60,0.06);
+}
+
+.env-flap.opened { transform: rotateX(-180deg); z-index: 1; }
+
+/* Heart seal */
+.env-seal {
+  position: absolute;
+  top: 55%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(1.2rem, 5vw, 1.6rem);
+  z-index: 11;
+  transition: opacity 0.3s;
+  filter: drop-shadow(0 0 6px rgba(232,25,60,0.6));
+}
+.env-seal.hide { opacity: 0; }
+
+/* Card — fixed, no scroll, all content visible */
+.inner-card {
+  position: fixed;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, var(--start-y, -200px));
+  width: min(86vw, 310px);
+  background: #ffffff;
+  border: 1px solid rgba(232,25,60,0.25);
+  border-radius: 14px;
+  padding: clamp(12px, 3.5vw, 18px) clamp(12px, 3.5vw, 18px);
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 1.0s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.35), 0 0 24px rgba(232,25,60,0.12);
+  overflow: hidden;   /* no scroll */
+}
+
+.inner-card.risen {
+  transform: translate(-50%, 10vh);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.inner-card-deco {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.inner-card-msg {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(0.70rem, 2.4vw, 0.82rem);
+  line-height: 1.60;
+  color: #2a0a0a;
+  text-align: left;
+}
+
+.inner-card-sig {
+  display: block;
+  margin-top: 8px;
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(0.85rem, 3vw, 1rem);
+  color: var(--red);
+  text-align: right;
+}
+
+/* ── PAGE 3: SPACE BACKGROUND + BIRTHDAY ── */
+#space-canvas {
+  position: fixed; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Page 3 wrapper — centred column, full height */
+#page3 > .p3-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Orbit wrapper — contains the card and the orbit canvas together */
+.orbit-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.birthday-card {
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 24px;
+  padding: clamp(24px, 6vw, 40px) clamp(18px, 5vw, 32px);
+  max-width: 320px;
+  width: 82%;
+  text-align: center;
+  box-shadow:
+    0 0 0 1px rgba(232,25,60,0.12),
+    0 8px 32px rgba(0,0,0,0.6),
+    0 0 80px rgba(180,100,255,0.18);
+  position: relative;
+  z-index: 2;
+  animation: floatCard 4s ease-in-out infinite;
+}
+
+.bday-emoji { font-size: clamp(1.8rem, 6vw, 2.6rem); margin-bottom: 10px; display: block; }
+
+.bday-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.3rem, 5vw, 2rem);
+  font-weight: 700;
+  color: var(--card-text);
+  margin-bottom: 8px;
+}
+
+.bday-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(0.9rem, 3.2vw, 1.05rem);
+  color: var(--card-sub-text);
+  line-height: 1.65;
+}
+
+/* Orbit canvas — JS positions it absolute over orbit-wrap */
+#orbit-canvas {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+  top: 0; left: 0;
+}
+
+/* ── PAGE 4: PHOTO RAIN ── */
+#photo-rain {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes photoDrop {
+  0%   { transform: translateY(0px) rotate(var(--rot)); opacity: 0; }
+  5%   { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(calc(var(--rot) + 10deg)); opacity: 0; }
+}
+
+.p4-label {
+  position: relative; z-index: 3;
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(1.3rem, 5vw, 2rem);
+  color: rgba(255,248,240,0.55);
+  text-align: center;
+  padding: 0 24px;
+  pointer-events: none;
+}
+
+/* ── PAGE 5 ── */
+#love-canvas {
+  position: fixed; inset: 0;
+  z-index: 2;
+}
+
+/* ── TYPING ANIMATION ── */
+.typing-text {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--red);
+  animation: typing 2.2s steps(40, end) forwards, blink 0.7s step-end infinite;
+  max-width: 100%;
+  color: var(--card-text);
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+.typing-text-2 {
+  overflow: hidden;
+  white-space: normal;
+  opacity: 0;
+  animation: fadeInTyping 1.5s ease 2.5s forwards;
+}
+
+@keyframes fadeInTyping {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── AMBIENT GLOW ── */
+.ambient {
+  position: fixed;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,25,60,0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: ambientPulse 6s ease-in-out infinite;
+}
+.ambient.a1 { top: -200px; left: -100px; }
+.ambient.a2 { bottom: -200px; right: -100px; animation-delay: -3s; }
+
+@keyframes ambientPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50%       { transform: scale(1.2); opacity: 1; }
+}
+
+/* ── PAGE TRANSITION ── */
+.page-overlay {
+  position: fixed; inset: 0;
+  background: black;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.page-overlay.flash { opacity: 1; }
+
+/* ── RESPONSIVE ── */
+@media (max-height: 650px) {
+  .open-btn { margin-top: 14px; }
+}
+
+@media (max-width: 360px) {
+  .floating-card { padding: 22px 16px; }
+  .birthday-card { padding: 24px 16px; }
+}
