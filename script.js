@@ -18,6 +18,7 @@ function vibrate() {
 
 function goTo(n) {
   vibrate();
+  startBGM();
   const overlay = document.getElementById('overlay');
   overlay.classList.add('flash');
   setTimeout(() => {
@@ -501,8 +502,6 @@ function initSpaceAndOrbit() {
 }
 
 
-// PAGE 4 – PHOTO RAIN
-
 const PHOTOS = [
   'assets/m4.mp4',
   'assets/m2.jpeg',
@@ -822,10 +821,25 @@ function startLightning(ctx, W, H, onDone) {
 // ══════════════════════════════════════════
 // BGM
 // ══════════════════════════════════════════
-document.addEventListener('click', () => {
+function startBGM() {
   const bgm = document.getElementById('bgm');
-  if (bgm.src && bgm.paused) bgm.play().catch(()=>{});
-}, { once: true });
+  if (!bgm || bgm._started) return;
+  bgm._started = true;
+  bgm.volume = 0.65;
+  bgm.play().catch(() => {});
+}
+
+// Try autoplay immediately on load (works on some browsers/contexts)
+window.addEventListener('load', () => {
+  const bgm = document.getElementById('bgm');
+  if (!bgm) return;
+  bgm.volume = 0.65;
+  bgm.play().then(() => {
+    bgm._started = true;
+  }).catch(() => {
+    // Blocked — will start on first interaction instead
+  });
+});
 
 // ══════════════════════════════════════════
 // INIT
