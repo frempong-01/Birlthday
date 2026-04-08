@@ -553,7 +553,23 @@ function initPage4() {
       const src = PHOTOS[Math.floor(Math.random() * PHOTOS.length)];
       if (src.match(/\.(mp4|webm|mov)$/i)) {
         const v = document.createElement('video');
-        v.src = src; v.autoplay = true; v.muted = true; v.loop = true;
+        v.src = src;
+        v.autoplay = true;
+        v.muted = true;
+        v.loop = true;
+
+        // 🔒 Disable Picture-in-Picture + extra controls
+        v.disablePictureInPicture = true;
+        v.controls = false;
+        v.controlsList = "nodownload nofullscreen noremoteplayback";
+        v.setAttribute("disablePictureInPicture", "");
+        v.setAttribute("playsinline", "");
+
+        // 🚫 Extra protection
+        v.addEventListener('enterpictureinpicture', (e) => {
+          e.preventDefault();
+        });
+
         v.style.cssText = 'width:100%;height:100%;object-fit:cover;';
         el.appendChild(v);
       } else {
